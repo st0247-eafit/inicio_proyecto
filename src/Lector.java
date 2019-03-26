@@ -80,7 +80,7 @@ public class Lector
     public static void main(String[] args)
     {
         Lector sp = new Lector();
-        Map<Long, Double> gragh = new Map<>();
+        Map gragh = new Map();
         sp.readFile(gragh);
     }
 }

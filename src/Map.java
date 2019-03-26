@@ -6,10 +6,10 @@ import java.util.HashMap;
  *
  * @author Mauricio Toro, Mateo Agudelo, <su nombre>
  */
-public class Map<V, C>{
+public class Map{
 
-    HashMap<V, HashMap<V, C>> caminos;
-    HashMap<V, Vertex> vertexes;
+    HashMap<Long, HashMap<Long, Double>> roads;
+    HashMap<Long, Vertex> vertexes;
 
     /**
      * Constructor para el grafo
@@ -17,7 +17,7 @@ public class Map<V, C>{
     public Map() {
         super();
         vertexes = new HashMap<>();
-        caminos = new HashMap<>();
+        roads = new HashMap<>();
     }
 
     /**
@@ -27,9 +27,9 @@ public class Map<V, C>{
      * @param destination hacia donde va el arco
      * @param distance  el peso de la longitud entre source y destination
      */
-    public void addRoad(V source, V destination, C distance){
+    public void addRoad(Long source, Long destination, Double distance){
 
-        (caminos.get(source)).put(destination, distance);
+        (roads.get(source)).put(destination, distance);
     }
 
     /**
@@ -39,9 +39,9 @@ public class Map<V, C>{
      * @param coordinateX es la primera coordenada del vertice
      * @param coordinateY es la segunda coordenada del vertice
      */
-    public void addVertex (V id, double coordinateX, double coordinateY) {
+    public void addVertex (Long id, double coordinateX, double coordinateY) {
         vertexes.put(id, (new Vertex((Long ) id, coordinateX, coordinateY)));
-        caminos.put(id, new HashMap<>());
+        roads.put(id, new HashMap<>());
     }
 
     /**
@@ -52,12 +52,12 @@ public class Map<V, C>{
      * Para más información de las clases:
      * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html"> Ver documentacion ArrayList </a>
      */
-    public ArrayList<V> getSuccessors(V vertex) {
+    public ArrayList<Long> getSuccessors(Long vertex) {
         // Una nueva lista que saque los sucesores
-        ArrayList<V> successors = new ArrayList<>();
-        HashMap<V, C> pairs = caminos.get(vertex);
+        ArrayList<Long> successors = new ArrayList<>();
+        HashMap<Long, Double> pairs = roads.get(vertex);
         if ( pairs != null && pairs.size() != 0 ) {
-            for ( V successor : pairs.keySet() ) {
+            for ( Long successor : pairs.keySet() ) {
                 successors.add(successor); //segunda parte de la pareja
             }
         }
@@ -71,12 +71,16 @@ public class Map<V, C>{
      * @param destination  donde termina el arco
      * @return un entero con dicho peso
      */
-    public C getWeight(V source, V destination) {
-        HashMap<V, C> pairs = caminos.get(source);
-        for ( V cDestination: pairs.keySet() ) {
+    public Double getDistance(Long source, Long destination) {
+        HashMap<Long, Double> pairs = roads.get(source);
+        for ( Long cDestination: pairs.keySet() ) {
             if ( cDestination == destination ) return (pairs.get(cDestination));
         }
         return null;
+    }
+
+    public Vertex getVertex(long idVertex) {
+        return vertexes.get(idVertex);
     }
 
     public int size(){
